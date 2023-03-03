@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package wallet_api;
+
+service Wallet_api {
+  rpc GetWallets(User_id) returns (Get_wallets_result);
+  rpc SaveWallet(Wallet_info) returns (Save_wallet_status);
+  rpc ValidateWallet(Validate_wallet_request) returns (Validate_result);
+}
+
+message User_id{
+  int32 user_id = 1;
+}
+
+message Get_wallets_result {
+  Get_wallets_status status = 1;
+  repeated Coins coins= 2;
+}
+
+message Coins {
+  string coin = 1;
+  repeated Networks networks = 2;
+}
+
+message  Networks {
+  string network = 1;
+  repeated string wallets = 2;
+}
+
+enum Get_wallets_status {
+  INTERNAL_ERROR = 0;
+  EMPTY = 1;
+  OK = 2;
+}
+
+message Wallet_info {
+  int32 user_id = 1;
+  string wallet = 2;
+  string coin  = 3;
+  string network = 4;
+}
+
+message Save_wallet_status {
+  Save_wallet_states status = 1;
+}
+enum Save_wallet_states{
+  ERROR = 0;
+  SUCCESS = 1;
+  WAS_SAVED = 2;
+}
+message Validate_wallet_request{
+  string wallet = 1;
+  string network = 2;
+}
+
+message Validate_result{
+  Validate_states internal_status = 1;
+  bool result = 2;
+}
+
+enum Validate_states{
+  VALIDATOR_ERROR = 0;
+  CHECKED = 1;
+}
